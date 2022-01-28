@@ -206,7 +206,7 @@ def threadit(session):
     email=values
     nick=names.get_first_name()
     nick = "t.me/piececoin"
-    req=request_verify_code(,session,email=email, deviceId=deviceid)
+    req=request_verify_code(session,email=email, deviceId=deviceid)
     print(session.get(url="https://ifconfig.me/ip").text)
     #vcode=verify(values)
     register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
