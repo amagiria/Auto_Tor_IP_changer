@@ -210,6 +210,8 @@ def threadit(session):
     print(session.get(url="https://ifconfig.me/ip").text)
     #vcode=verify(values)
     register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    p=input("hello:")
+    register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
 
 while True:
