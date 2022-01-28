@@ -139,9 +139,13 @@ def get_message(email):
                 except:
                     pass
             
- 
+def get_proxy_session():
+    session = requests.session()
+    session.proxies = {'http': 'socks5://127.0.0.1:9050','https': 'socks5://127.0.0.1:9050'}
+    return session
+
          
-def register(nickname: str, email: str, password: str,deviceId: str):
+def register(session,nickname: str, email: str, password: str,deviceId: str):
         data = {
             "secret": f"0 {password}",
             "deviceID": deviceId,
@@ -168,10 +172,10 @@ def register(nickname: str, email: str, password: str,deviceId: str):
         heads["NDC-MSG-SIG"]=sig(data)
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
-        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads,proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050'))
+        response = session.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads)
         print(response.text)   
         
-def request_verify_code(email: str,deviceId: str):
+def request_verify_code(session,email: str,deviceId: str):
         data = {
             "identity": email,
             "type": 1,
@@ -189,26 +193,28 @@ def request_verify_code(email: str,deviceId: str):
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
         heads["NDC-MSG-SIG"]=sig(data)
-        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads,proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050'))
+        response = session.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads)
         print(response.text)
  
  
 
  
  
-def threadit():
+def threadit(session):
     deviceid=dev()
     values=gen_email()
     email=values
     nick=names.get_first_name()
     nick = "t.me/piececoin"
-    req=request_verify_code(email=email, deviceId=deviceid)
-    print(requests.get(url="https://ifconfig.me/ip",proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050')).text)
+    req=request_verify_code(,session,email=email, deviceId=deviceid)
+    print(session.get(url="https://ifconfig.me/ip").text)
     #vcode=verify(values)
-    register(nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
 
 while True:
+    change()
+    session = get_proxy_session()
     for _ in range (3):
-        threadit()
-        change()
+        threadit(session)
+        
