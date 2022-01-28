@@ -190,7 +190,7 @@ def request_verify_code(email: str,deviceId: str):
         heads["NDCDEVICEID"]=deviceId
         heads["NDC-MSG-SIG"]=sig(data)
         response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads,proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050'))
- 
+        print(response.text)
  
  
 
