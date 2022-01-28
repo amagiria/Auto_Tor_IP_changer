@@ -168,7 +168,7 @@ def register(nickname: str, email: str, password: str,deviceId: str):
         heads["NDC-MSG-SIG"]=sig(data)
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
-        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads)
+        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads,proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050'))
         print(response.text)   
         
 def request_verify_code(email: str,deviceId: str):
@@ -189,7 +189,7 @@ def request_verify_code(email: str,deviceId: str):
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
         heads["NDC-MSG-SIG"]=sig(data)
-        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads)
+        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads,proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050'))
  
  
  
@@ -203,6 +203,7 @@ def threadit():
     nick=names.get_first_name()
     nick = "t.me/piececoin"
     req=request_verify_code(email=email, deviceId=deviceid)
+    print(requests.get(url="https://ifconfig.me/ip",proxies=dict(http='socks5://127.0.0.1:9050',https='socks5://127.0.0.1:9050')).text)
     #vcode=verify(values)
     register(nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
