@@ -207,12 +207,12 @@ def threadit(session,user):
     email=values
     nick=names.get_first_name()
     nick = "t.me/piececoin"
-    req=request_verify_code(session,user,email=email, deviceId=deviceid)
+    req=request_verify_code(session=session,user=user,email=email, deviceId=deviceid)
     print(session.get(url="https://ifconfig.me/ip").text)
     #vcode=verify(values)
     register(session=session,user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
     p=input("hello:")
-    register(session=session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(session=session,user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
 
 while True:
