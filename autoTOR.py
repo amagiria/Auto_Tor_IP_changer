@@ -146,7 +146,7 @@ def get_proxy_session():
     return session
 
          
-def register(session,user,nickname: str, email: str, password: str,deviceId: str):
+def register(user,nickname: str, email: str, password: str,deviceId: str):
         data = {
             "secret": f"0 {password}",
             "deviceID": deviceId,
@@ -176,7 +176,7 @@ def register(session,user,nickname: str, email: str, password: str,deviceId: str
         response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads,proxies={'http': 'socks5://127.0.0.1:9050','https': 'socks5://127.0.0.1:9050'})
         print(response.text)   
         
-def request_verify_code(session,user,email: str,deviceId: str):
+def request_verify_code(user,email: str,deviceId: str):
         data = {
             "identity": email,
             "type": 1,
