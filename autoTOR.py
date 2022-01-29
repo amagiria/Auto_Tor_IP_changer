@@ -173,7 +173,7 @@ def register(session,user,nickname: str, email: str, password: str,deviceId: str
         heads["NDC-MSG-SIG"]=sig(data)
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
-        response = session.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads)
+        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads,proxies={'http': 'socks5://127.0.0.1:9050','https': 'socks5://127.0.0.1:9050'})
         print(response.text)   
         
 def request_verify_code(session,user,email: str,deviceId: str):
@@ -194,33 +194,33 @@ def request_verify_code(session,user,email: str,deviceId: str):
         heads["Content-Length"] = str(len(data))
         heads["NDCDEVICEID"]=deviceId
         heads["NDC-MSG-SIG"]=sig(data)
-        response = session.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads)
+        response = requests.post(f"https://service.narvii.com/api/v1/g/s/auth/request-security-validation", data=data, headers=heads,proxies={'http': 'socks5://127.0.0.1:9050','https': 'socks5://127.0.0.1:9050'})
         print(response.text)
  
  
 
  
  
-def threadit(session,user):
+def threadit(user):
     deviceid=dev()
     values=gen_email()
     email=values
     nick=names.get_first_name()
     nick = "t.me/piececoin"
-    req=request_verify_code(session=session,user=user,email=email, deviceId=deviceid)
-    print(session.get(url="https://ifconfig.me/ip").text)
+    req=request_verify_code(user=user,email=email, deviceId=deviceid)
+    print(requests.get(url="https://ifconfig.me/ip",proxies={'http': 'socks5://127.0.0.1:9050','https': 'socks5://127.0.0.1:9050'}).text)
     #vcode=verify(values)
-    register(session=session,user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
     p=input("hello:")
-    register(session=session,user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
 
 while True:
     change()
-    session = get_proxy_session()
+    #session = get_proxy_session()
     
     for _ in range (3):
         s=requests.Session()
         user=s.headers["User-Agent"]
-        threadit(session,user)
+        threadit(user)
         
