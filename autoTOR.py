@@ -14,6 +14,7 @@ import time
 import json
 from hashlib import sha1
 import secmail
+import requests_random_user_agent
 import random
 import platform,socket,re,uuid
 import json
@@ -145,7 +146,7 @@ def get_proxy_session():
     return session
 
          
-def register(session,nickname: str, email: str, password: str,deviceId: str):
+def register(session,user,nickname: str, email: str, password: str,deviceId: str):
         data = {
             "secret": f"0 {password}",
             "deviceID": deviceId,
@@ -163,7 +164,7 @@ def register(session,nickname: str, email: str, password: str,deviceId: str):
         heads={
     'Accept-Language': 'en-US', 
     'Content-Type': 'application/json; charset=utf-8', 
-    'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 7.1; LG-UK495 Build/MRA58K; com.narvii.amino.master/3.3.33180)', 
+    'User-Agent':user, 
     'Host': 'service.narvii.com', 
     'Accept-Encoding': 'gzip',
     'Connection': 'Keep-Alive',
@@ -175,7 +176,7 @@ def register(session,nickname: str, email: str, password: str,deviceId: str):
         response = session.post(f"https://service.narvii.com/api/v1/g/s/auth/register", data=data, headers=heads)
         print(response.text)   
         
-def request_verify_code(session,email: str,deviceId: str):
+def request_verify_code(session,user,email: str,deviceId: str):
         data = {
             "identity": email,
             "type": 1,
@@ -184,7 +185,7 @@ def request_verify_code(session,email: str,deviceId: str):
         heads={
     'Accept-Language': 'en-US', 
     'Content-Type': 'application/json; charset=utf-8', 
-    'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 7.1; LG-UK495 Build/MRA58K; com.narvii.amino.master/3.3.33180)', 
+    'User-Agent': user, 
     'Host': 'service.narvii.com', 
     'Accept-Encoding': 'gzip',
     'Connection': 'Keep-Alive',
@@ -200,23 +201,26 @@ def request_verify_code(session,email: str,deviceId: str):
 
  
  
-def threadit(session):
+def threadit(session,user):
     deviceid=dev()
     values=gen_email()
     email=values
     nick=names.get_first_name()
     nick = "t.me/piececoin"
-    req=request_verify_code(session,email=email, deviceId=deviceid)
+    req=request_verify_code(session,user,email=email, deviceId=deviceid)
     print(session.get(url="https://ifconfig.me/ip").text)
     #vcode=verify(values)
-    register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(session=session,user=user,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
     p=input("hello:")
-    register(session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
+    register(session=session,nickname=nick, email=email, password="dfghjhdfg",deviceId=deviceid)
  
 
 while True:
     change()
     session = get_proxy_session()
+    
     for _ in range (3):
-        threadit(session)
+        s=requests.Session()
+        user=s.headers["User-Agent"]
+        threadit(session,user)
         
